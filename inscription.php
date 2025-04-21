@@ -17,7 +17,6 @@
       $connexion = new PDO("mysql:host=$serveur;port=3306;dbname=dragon;charset=utf8", $login, $mdp);
       $connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
       $connexion->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-      echo "Connexion réussie à la base de données.";
    } catch (PDOException $e) {
       echo "Erreur de connexion : " . $e->getMessage();
    }
@@ -29,6 +28,9 @@
 
       <label for="prenom">Prénom :</label>
       <input type="text" id="prenom" name="prenom" placeholder="Prénom" required>
+
+      <label for="adresse">adresse :</label>
+      <input type="text" id="adresse" name="adresse" placeholder="adresse" required>
 
       <label for="email">Email :</label>
       <input type="email" id="email" name="email" placeholder="Email" required>
@@ -42,6 +44,7 @@
    if (isset($_POST['to'])) {
       $nom = $_POST['nom'];
       $prenom = $_POST['prenom'];
+      $adresse = $_POST['adresse'];
       $email = $_POST['email'];
       $pass = $_POST['pass'];
 
@@ -52,10 +55,11 @@
       $token = bin2hex(random_bytes(16));
 
 
-      $requete = $connexion->prepare("INSERT INTO ball (nom, prenom, email, pass, token) VALUES (:nom, :prenom, :email, :pass, :token)");
+      $requete = $connexion->prepare("INSERT INTO ball (nom, prenom, adresse, email, pass, token) VALUES (:nom, :prenom,:adresse,:email, :pass, :token)");
       $success = $requete->execute(array(
          ':nom' => $nom,
          ':prenom' => $prenom,
+         ':adresse' => $adresse,
          ':email' => $email,
          ':pass' => $pass_hache,
          ':token' => $token
